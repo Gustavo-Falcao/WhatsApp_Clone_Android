@@ -35,8 +35,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.style.LineHeightStyle
+import com.example.myapplication.ui.theme.BlueCheckMessage
 import com.example.myapplication.ui.theme.GrayBox
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
@@ -54,10 +56,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    //Conversas(modifier = Modifier.padding(innerPadding))
+                    ChatView(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -65,28 +65,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(top = 20.dp)
-//            .background(color = Color.Red),
-//        horizontalArrangement = Arrangement.Center,
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Text(
-//            text = "Hello $name!",
-//            modifier = modifier
-//        )
-//
-//        Icon(
-//            painter = painterResource(id = R.drawable.home_icon),
-//            contentDescription = "Home Icon",
-//            Modifier.size(40.dp)
-//        )
-//    }
-
+fun Conversas(modifier: Modifier = Modifier) {
     var search by remember { mutableStateOf("") }
 
     Column (
@@ -172,23 +151,18 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
             }
         }
 
-        Column(modifier = Modifier
-            .padding(top = 10.dp)
-            .weight(1f)
-            .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-
+        Column(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .weight(1f)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            //fazer for chamando contato element
-            //passar parametro indicando se o contatoElement é o último da lista
-
             for (i in 1 .. 15) {
                 val isNotificationViewd = i % 2 == 0
                 val showSeparatorLine = i != 15
                 ContatoElement(isNotificationViewd, showSeparatorLine)
             }
-
-
         }
         Box() {
             Icon(
@@ -214,7 +188,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun MenuBar() {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -297,12 +270,10 @@ fun MenuBar() {
             )
         }
     }
-
 }
 
 @Composable
 fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean) {
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -337,7 +308,7 @@ fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean) {
                         Icon(
                             painter = painterResource(id = R.drawable.check_message_icon),
                             contentDescription = "Check icon",
-                            tint = if (isNotificationViewd) GreenPrimary else GrayTextForeGround ,
+                            tint = if (isNotificationViewd) BlueCheckMessage else GrayTextForeGround ,
                             modifier = Modifier.size(30.dp)
                         )
                     }
@@ -356,13 +327,12 @@ fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean) {
 
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MyApplicationTheme {
-        Greeting("Android")
+        Conversas()
     }
 }
