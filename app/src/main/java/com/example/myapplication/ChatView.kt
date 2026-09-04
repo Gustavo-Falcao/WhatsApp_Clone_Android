@@ -40,6 +40,7 @@ import com.example.myapplication.ui.theme.GrayInfoBoxMessage
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
 import com.example.myapplication.ui.theme.GreenMessageBoxSender
+import com.example.myapplication.ui.theme.GreenPrimary
 import com.example.myapplication.ui.theme.MainBackGroundColor
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import java.nio.file.WatchEvent
@@ -138,15 +139,59 @@ fun BottomChat() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = GreenBackGroundNavBar)
             .padding(horizontal = 5.dp)
             .padding(top = 10.dp)
-            .padding(bottom = 5.dp)
+            .padding(bottom = 5.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         TextField(
             value = textMsg,
-            onValueChange = {textMsg = it}
+            onValueChange = {textMsg = it},
+            modifier = Modifier
+                .clip(RoundedCornerShape(30.dp))
+                .widthIn(330.dp),
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.add_reaction_icon),
+                    contentDescription = "Add reaction",
+                    tint = GrayTextForeGround,
+                    modifier = Modifier.size(26.dp)
+                )
+            },
+            trailingIcon = {
+                Row(
+                    modifier = Modifier
+                        .padding(end = 5.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.attach_file_icon),
+                        contentDescription = "Add reaction",
+                        tint = GrayTextForeGround,
+                        modifier = Modifier.size(26.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.photo_camera_icon),
+                        contentDescription = "Add reaction",
+                        tint = GrayTextForeGround,
+                        modifier = Modifier.size(26.dp)
+                    )
+                }
+            }
         )
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(50.dp))
+                .background(color = GreenPrimary)
+                .padding(10.dp)
+        ){
+            Icon(
+                painter = painterResource(id = R.drawable.mic_icon),
+                contentDescription = "Arrow back",
+                tint = Color.White,
+                modifier = Modifier.size(30.dp)
+            )
+        }
     }
 }
 
@@ -155,7 +200,7 @@ fun BodyChat(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 5.dp)
+            .padding(top = 2.dp)
             .verticalScroll(rememberScrollState())
     ) {
         BadgeInfo("Today")
