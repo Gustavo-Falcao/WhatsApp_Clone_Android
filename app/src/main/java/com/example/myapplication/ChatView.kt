@@ -98,19 +98,19 @@ fun HeaderChat() {
                 Text(
                     text = "Nome Contato",
                     color = Color.White,
-                    fontSize = 17.sp,
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
                     text = "Status",
                     color = Color.White,
-                    fontSize = 15.sp
+                    fontSize = 12.sp
+
                 )
             }
         }
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.videocam_icon),
@@ -389,22 +389,23 @@ fun MessageElementSender(message: String, hour: String, isChecked: Boolean) {
             .padding(horizontal = 10.dp)
             .padding(vertical = 5.dp),
         verticalAlignment = Alignment.Bottom,
-        horizontalArrangement = Arrangement.spacedBy(5.dp)
+        horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         Text(
             text = message,
             color = Color.White,
             lineHeight = 21.sp,
             modifier = Modifier
-                .widthIn(max = 230.dp)
+                .widthIn(max = 200.dp)
                 .padding(bottom = 5.dp)
         )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(5.dp)
+            horizontalArrangement = Arrangement.spacedBy(2.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = hour,
-                fontSize = 13.sp,
+                fontSize = 10.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = GrayInfoBoxMessage
             )
@@ -412,7 +413,7 @@ fun MessageElementSender(message: String, hour: String, isChecked: Boolean) {
                 painter = painterResource(id = R.drawable.check_message_icon),
                 contentDescription = "Settings",
                 tint = if(isChecked) BlueCheckMessage else GrayTextForeGround,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(20.dp)
             )
         }
     }
@@ -435,13 +436,13 @@ fun MessageElementReceiver(message: String, hour: String) {
             color = Color.White,
             lineHeight = 21.sp,
             modifier = Modifier
-                .widthIn(max = 230.dp)
+                .widthIn(max = 200.dp)
                 .padding(bottom = 5.dp)
         )
 
         Text(
             text = hour,
-            fontSize = 13.sp,
+            fontSize = 10.sp,
             fontWeight = FontWeight.SemiBold,
             color = GrayInfoBoxMessage
         )
@@ -460,12 +461,12 @@ fun BadgeInfo(text: String) {
             text = text,
             color = GrayTextForeGround,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 15.sp,
+            fontSize = 13.sp,
             modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
+                .clip(RoundedCornerShape(20.dp))
                 .background(color = GreenBackGroundNavBar)
                 .padding(horizontal = 10.dp)
-                .padding(vertical = 5.dp)
+                .padding(vertical = 2.dp)
         )
     }
 }

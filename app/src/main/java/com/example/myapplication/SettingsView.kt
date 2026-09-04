@@ -105,7 +105,7 @@ fun PhotoField() {
                     .clip(RoundedCornerShape(100.dp))
                     .background(color = GreenPrimary)
                     .padding(30.dp)
-                    .size(130.dp)
+                    .size(100.dp)
             )
 
             Icon(
@@ -117,7 +117,7 @@ fun PhotoField() {
                     .clip(RoundedCornerShape(50.dp))
                     .background(color = GreenMessageBoxSender)
                     .padding(15.dp)
-                    .size(30.dp)
+                    .size(23.dp)
             )
         }
     }
@@ -148,18 +148,18 @@ fun OptionSettings() {
                     tint = Color.White,
                     modifier = Modifier
                         .offset(y = 10.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = "Account",
-                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "Security notifications, change number",
+                        fontSize = 13.sp,
                         color = GrayTextForeGround,
                         modifier = Modifier
                             .padding(bottom = 18.dp)
@@ -177,18 +177,18 @@ fun OptionSettings() {
                     tint = Color.White,
                     modifier = Modifier
                         .offset(y = 10.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = "Privacy",
-                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "Block contacts, disappearing messages",
+                        fontSize = 13.sp,
                         color = GrayTextForeGround,
                         modifier = Modifier
                             .padding(bottom = 18.dp)
@@ -206,18 +206,18 @@ fun OptionSettings() {
                     tint = Color.White,
                     modifier = Modifier
                         .offset(y = 10.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = "Avatar",
-                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "Create, edit, profile photo",
+                        fontSize = 13.sp,
                         color = GrayTextForeGround,
                         modifier = Modifier
                             .padding(bottom = 18.dp)
@@ -235,18 +235,18 @@ fun OptionSettings() {
                     tint = Color.White,
                     modifier = Modifier
                         .offset(y = 10.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = "Lists",
-                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "Manage people and groups",
+                        fontSize = 13.sp,
                         color = GrayTextForeGround,
                         modifier = Modifier
                             .padding(bottom = 18.dp)
@@ -264,18 +264,18 @@ fun OptionSettings() {
                     tint = Color.White,
                     modifier = Modifier
                         .offset(y = 10.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = "Chats",
-                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "Theme, wallpapers, chat history",
+                        fontSize = 13.sp,
                         color = GrayTextForeGround,
                         modifier = Modifier
                             .padding(bottom = 18.dp)
@@ -293,19 +293,19 @@ fun OptionSettings() {
                     tint = Color.White,
                     modifier = Modifier
                         .offset(y = 10.dp)
-                        .size(30.dp)
+                        .size(24.dp)
                 )
                 Column(
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                    verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
                         text = "Notifications",
-                        fontSize = 20.sp,
                         color = Color.White
                     )
                     Text(
                         text = "Message, group & call tones",
                         color = GrayTextForeGround,
+                        fontSize = 13.sp,
                         modifier = Modifier
                             .padding(bottom = 18.dp)
                     )
@@ -321,7 +321,7 @@ fun SeparatorLine() {
         modifier = Modifier
             .fillMaxWidth()
             .background(color = GrayTextForeGround)
-            .padding(vertical = (0.6).dp)
+            .padding(vertical = 0.5.dp)
     ) {}
 }
 

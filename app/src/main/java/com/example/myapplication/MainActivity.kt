@@ -57,8 +57,8 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //Conversas(modifier = Modifier.padding(innerPadding))
-                    ChatView(modifier = Modifier.padding(innerPadding))
-                    //SettingsView(modifier = Modifier.padding(innerPadding))
+                    //ChatView(modifier = Modifier.padding(innerPadding))
+                    SettingsView(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
