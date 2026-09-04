@@ -16,6 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -142,20 +143,21 @@ fun BottomChat() {
             .padding(horizontal = 5.dp)
             .padding(top = 10.dp)
             .padding(bottom = 5.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        TextField(
+        OutlinedTextField(
             value = textMsg,
             onValueChange = {textMsg = it},
             modifier = Modifier
                 .clip(RoundedCornerShape(30.dp))
-                .widthIn(330.dp),
+                .widthIn(250.dp),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.add_reaction_icon),
                     contentDescription = "Add reaction",
                     tint = GrayTextForeGround,
-                    modifier = Modifier.size(26.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             },
             trailingIcon = {
@@ -166,15 +168,15 @@ fun BottomChat() {
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.attach_file_icon),
-                        contentDescription = "Add reaction",
+                        contentDescription = "Attach file icon",
                         tint = GrayTextForeGround,
-                        modifier = Modifier.size(26.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.photo_camera_icon),
-                        contentDescription = "Add reaction",
+                        contentDescription = "Photo camera icon",
                         tint = GrayTextForeGround,
-                        modifier = Modifier.size(26.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
@@ -189,7 +191,7 @@ fun BottomChat() {
                 painter = painterResource(id = R.drawable.mic_icon),
                 contentDescription = "Arrow back",
                 tint = Color.White,
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(24.dp)
             )
         }
     }

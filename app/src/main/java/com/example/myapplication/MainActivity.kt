@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //Conversas(modifier = Modifier.padding(innerPadding))
                     ChatView(modifier = Modifier.padding(innerPadding))
+                    //SettingsView(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -87,7 +88,7 @@ fun Conversas(modifier: Modifier = Modifier) {
                 Text(
                     text = "WhatsApp",
                     color = Color.White,
-                    fontSize = 30.sp
+                    fontSize = 24.sp
                 )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(20.dp)
@@ -96,13 +97,13 @@ fun Conversas(modifier: Modifier = Modifier) {
                         painter = painterResource(id = R.drawable.photo_camera_icon),
                         contentDescription = "Photo camera icon",
                         tint = Color.White,
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                     Icon(
                         painter = painterResource(id = R.drawable.settings_icon),
                         contentDescription = "Settings icon",
                         tint = Color.White,
-                        modifier = Modifier.size(30.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
@@ -125,7 +126,7 @@ fun Conversas(modifier: Modifier = Modifier) {
                         .clip(RoundedCornerShape(30.dp))
                         .background(color = GreenSecondary)
                         .padding(horizontal = 20.dp)
-                        .padding(vertical = 10.dp)
+                        .padding(vertical = 5.dp)
                 ) {
                     Text(text = "All", color = Color.White)
                 }
@@ -134,7 +135,7 @@ fun Conversas(modifier: Modifier = Modifier) {
                         .clip(RoundedCornerShape(30.dp))
                         .background(color = GrayBox)
                         .padding(horizontal = 20.dp)
-                        .padding(vertical = 10.dp)
+                        .padding(vertical = 5.dp)
 
                 ) {
                     Text(text = "Unread", color = GrayTextForeGround)
@@ -144,7 +145,7 @@ fun Conversas(modifier: Modifier = Modifier) {
                         .clip(RoundedCornerShape(30.dp))
                         .background(color = GrayBox)
                         .padding(horizontal = 20.dp)
-                        .padding(vertical = 10.dp)
+                        .padding(vertical = 5.dp)
                 ) {
                     Text(text = "Groups", color = GrayTextForeGround)
                 }
@@ -153,7 +154,7 @@ fun Conversas(modifier: Modifier = Modifier) {
 
         Column(
             modifier = Modifier
-                .padding(top = 20.dp)
+                .padding(vertical = 20.dp)
                 .weight(1f)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(15.dp)
@@ -192,7 +193,7 @@ fun MenuBar() {
         modifier = Modifier
             .fillMaxWidth()
             .background(color = GreenBackGroundNavBar)
-            .padding(15.dp),
+            .padding(5.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -207,8 +208,8 @@ fun MenuBar() {
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
                     .background(color = GreenShadow)
-                    .padding(18.dp)
-                    .size(28.dp)
+                    .padding(10.dp)
+                    .size(24.dp)
             )
             Text(
                 text = "Chats",
@@ -225,8 +226,8 @@ fun MenuBar() {
                 tint = Color.White,
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .padding(18.dp)
-                    .size(28.dp)
+                    .padding(10.dp)
+                    .size(24.dp)
             )
             Text(
                 text = "Calls",
@@ -243,8 +244,8 @@ fun MenuBar() {
                 tint = Color.White,
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .padding(18.dp)
-                    .size(30.dp)
+                    .padding(10.dp)
+                    .size(24.dp)
             )
             Text(
                 text = "Communities",
@@ -261,8 +262,8 @@ fun MenuBar() {
                 tint = Color.White,
                 modifier = Modifier
                     .clip(RoundedCornerShape(20.dp))
-                    .padding(18.dp)
-                    .size(28.dp)
+                    .padding(10.dp)
+                    .size(24.dp)
             )
             Text(
                 text = "You",
@@ -283,12 +284,17 @@ fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Box(
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_person),
+                contentDescription = "Person Icon",
+                tint = GrayTextForeGround,
                 modifier = Modifier
                     .clip(RoundedCornerShape(100.dp))
                     .background(color = GrayBox)
-                    .padding(30.dp)
-            ){}
+                    .padding(10.dp)
+                    .size(35.dp)
+            )
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -298,18 +304,20 @@ fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean) {
                     modifier = Modifier
                     .fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                )
+                {
                     Column() {
                         Text(text = "Contato", color = Color.White)
                         Text(text = "Last message", color = GrayTextForeGround)
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = "hh:mm", color = GrayTextForeGround)
+                        Text(text = "hh:mm", color = GrayTextForeGround, fontSize = 14.sp)
                         Icon(
                             painter = painterResource(id = R.drawable.check_message_icon),
                             contentDescription = "Check icon",
                             tint = if (isNotificationViewd) BlueCheckMessage else GrayTextForeGround ,
-                            modifier = Modifier.size(30.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }
@@ -319,7 +327,7 @@ fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean) {
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(color = GrayTextForeGround)
-                            .padding(vertical = 1.dp)
+                            .padding(vertical = (0.5).dp)
                     ) {}
                 }
 
