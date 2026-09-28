@@ -1,7 +1,7 @@
-package com.example.myapplication
+package com.example.myapplication.ui.screens
 
-import android.graphics.fonts.Font
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,17 +24,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.ui.theme.BlueCheckMessage
-import com.example.myapplication.ui.theme.GrayBox
 import com.example.myapplication.ui.theme.GrayInfoBoxMessage
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
@@ -44,24 +40,24 @@ import com.example.myapplication.ui.theme.GreenMessageBoxSender
 import com.example.myapplication.ui.theme.GreenPrimary
 import com.example.myapplication.ui.theme.MainBackGroundColor
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import java.nio.file.WatchEvent
-import kotlin.math.max
 
 @Composable
-fun ChatView(modifier: Modifier = Modifier) {
+fun ChatScreen(
+    voltar: () -> Unit
+) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(color = MainBackGroundColor)
     ) {
-        HeaderChat()
+        HeaderChat(voltar)
         BodyChat(modifier = Modifier.weight(1f))
         BottomChat()
     }
 }
 
 @Composable
-fun HeaderChat() {
+fun HeaderChat(voltar: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -80,6 +76,7 @@ fun HeaderChat() {
                 contentDescription = "Arrow back",
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
+                    .clickable(onClick = voltar)
             )
             Box(
                 modifier = Modifier
@@ -468,13 +465,5 @@ fun BadgeInfo(text: String) {
                 .padding(horizontal = 10.dp)
                 .padding(vertical = 2.dp)
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ChatViewPreview() {
-    MyApplicationTheme {
-        ChatView()
     }
 }

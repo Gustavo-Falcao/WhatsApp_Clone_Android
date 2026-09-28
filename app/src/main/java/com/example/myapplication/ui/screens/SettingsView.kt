@@ -1,10 +1,12 @@
-package com.example.myapplication
+package com.example.myapplication.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -13,8 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +30,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
 import com.example.myapplication.ui.theme.GreenMessageBoxSender
@@ -32,48 +39,86 @@ import com.example.myapplication.ui.theme.MainBackGroundColor
 import com.example.myapplication.ui.theme.MyApplicationTheme
 
 @Composable
-fun SettingsView(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = MainBackGroundColor)
-    ) {
-        SettingsHeader()
-        SettingsBody()
+fun SettingsScreen(voltar: () -> Unit) {
+
+    Scaffold(
+        topBar = {SettingsHeader(voltar)}
+    ) { innerPading ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPading)
+                .consumeWindowInsets(innerPading)
+                .background(color = MainBackGroundColor)
+        ) {
+            SettingsBody()
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsHeader() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = GreenBackGroundNavBar)
-            .padding(vertical = 15.dp)
-            .padding(horizontal = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+fun SettingsHeader(voltar: () -> Unit) {
+
+    TopAppBar(
+        title = {
+            Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_back_icon),
+                    contentDescription = "Arrow back",
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable(onClick = voltar)
+                )
+                Text(
+                    text = "Profile",
+                    fontSize = 20.sp,
+                    color = Color.White
+                )
+            }
+        },
+        actions = {
             Icon(
-                painter = painterResource(id = R.drawable.arrow_back_icon),
-                contentDescription = "Arrow back",
+                painter = painterResource(id = R.drawable.search_icon),
+                contentDescription = "Search icon",
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
             )
-            Text(
-                text = "Profile",
-                fontSize = 20.sp,
-                color = Color.White
-            )
-        }
-
-        Icon(
-            painter = painterResource(id = R.drawable.search_icon),
-            contentDescription = "Search icon",
-            tint = Color.White,
-            modifier = Modifier.size(24.dp)
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = GreenBackGroundNavBar
         )
-    }
+    )
+//    Row(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .background(color = GreenBackGroundNavBar)
+//            .padding(vertical = 15.dp),
+//            //.padding(horizontal = 10.dp),
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
+//            Icon(
+//                painter = painterResource(id = R.drawable.arrow_back_icon),
+//                contentDescription = "Arrow back",
+//                tint = Color.White,
+//                modifier = Modifier.size(24.dp)
+//            )
+//            Text(
+//                text = "Profile",
+//                fontSize = 20.sp,
+//                color = Color.White
+//            )
+//        }
+//
+//        Icon(
+//            painter = painterResource(id = R.drawable.search_icon),
+//            contentDescription = "Search icon",
+//            tint = Color.White,
+//            modifier = Modifier.size(24.dp)
+//        )
+//    }
 }
 
 @Composable
@@ -323,12 +368,4 @@ fun SeparatorLine() {
             .background(color = GrayTextForeGround)
             .padding(vertical = 0.5.dp)
     ) {}
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SettingsViewPreview() {
-    MyApplicationTheme {
-        SettingsView()
-    }
 }
