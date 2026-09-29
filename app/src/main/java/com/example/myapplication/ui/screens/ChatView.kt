@@ -1,7 +1,7 @@
-package com.example.myapplication
+package com.example.myapplication.ui.screens
 
-import android.graphics.fonts.Font
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,15 +10,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,17 +28,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.R
 import com.example.myapplication.ui.theme.BlueCheckMessage
-import com.example.myapplication.ui.theme.GrayBox
 import com.example.myapplication.ui.theme.GrayInfoBoxMessage
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
@@ -44,24 +44,102 @@ import com.example.myapplication.ui.theme.GreenMessageBoxSender
 import com.example.myapplication.ui.theme.GreenPrimary
 import com.example.myapplication.ui.theme.MainBackGroundColor
 import com.example.myapplication.ui.theme.MyApplicationTheme
-import java.nio.file.WatchEvent
-import kotlin.math.max
 
 @Composable
-fun ChatView(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = MainBackGroundColor)
-    ) {
-        HeaderChat()
-        BodyChat(modifier = Modifier.weight(1f))
-        BottomChat()
+fun ChatScreen(
+    voltar: () -> Unit
+) {
+    Scaffold(
+        topBar = {TopBarChat(voltar)}
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MainBackGroundColor)
+                .padding(innerPadding)
+        ) {
+            BodyChat(modifier = Modifier.weight(1f))
+            BottomChat()
+        }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderChat() {
+fun TopBarChat(voltar: () -> Unit) {
+    TopAppBar(
+        title = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_back_icon),
+                    contentDescription = "Arrow back",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                        .clickable(onClick = voltar)
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(color = GrayTextForeGround)
+                        .padding(10.dp)
+                ){
+                    Icon(
+                        painter = painterResource(id = R.drawable.account_circle_icon),
+                        contentDescription = "Arrow back",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Column() {
+                    Text(
+                        text = "Nome Contato",
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Status",
+                        color = Color.White,
+                        fontSize = 12.sp
+
+                    )
+                }
+            }
+        },
+        actions = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.videocam_icon),
+                    contentDescription = "Video cam",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.phone_icon),
+                    contentDescription = "Phone call",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.settings_icon),
+                    contentDescription = "Settings",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = GreenBackGroundNavBar
+        )
+    )
+}
+
+@Composable
+fun HeaderChat(voltar: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -80,6 +158,7 @@ fun HeaderChat() {
                 contentDescription = "Arrow back",
                 tint = Color.White,
                 modifier = Modifier.size(24.dp)
+                    .clickable(onClick = voltar)
             )
             Box(
                 modifier = Modifier
@@ -468,13 +547,5 @@ fun BadgeInfo(text: String) {
                 .padding(horizontal = 10.dp)
                 .padding(vertical = 2.dp)
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ChatViewPreview() {
-    MyApplicationTheme {
-        ChatView()
     }
 }
