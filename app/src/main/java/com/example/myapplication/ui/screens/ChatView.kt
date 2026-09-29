@@ -14,9 +14,13 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,15 +49,93 @@ import com.example.myapplication.ui.theme.MyApplicationTheme
 fun ChatScreen(
     voltar: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MainBackGroundColor)
-    ) {
-        HeaderChat(voltar)
-        BodyChat(modifier = Modifier.weight(1f))
-        BottomChat()
+    Scaffold(
+        topBar = {TopBarChat(voltar)}
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MainBackGroundColor)
+                .padding(innerPadding)
+        ) {
+            BodyChat(modifier = Modifier.weight(1f))
+            BottomChat()
+        }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBarChat(voltar: () -> Unit) {
+    TopAppBar(
+        title = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow_back_icon),
+                    contentDescription = "Arrow back",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                        .clickable(onClick = voltar)
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(50.dp))
+                        .background(color = GrayTextForeGround)
+                        .padding(10.dp)
+                ){
+                    Icon(
+                        painter = painterResource(id = R.drawable.account_circle_icon),
+                        contentDescription = "Arrow back",
+                        tint = Color.White,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+                Column() {
+                    Text(
+                        text = "Nome Contato",
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Status",
+                        color = Color.White,
+                        fontSize = 12.sp
+
+                    )
+                }
+            }
+        },
+        actions = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.videocam_icon),
+                    contentDescription = "Video cam",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.phone_icon),
+                    contentDescription = "Phone call",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+                Icon(
+                    painter = painterResource(id = R.drawable.settings_icon),
+                    contentDescription = "Settings",
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = GreenBackGroundNavBar
+        )
+    )
 }
 
 @Composable
