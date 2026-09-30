@@ -13,3 +13,9 @@ data object Main
 
 @Serializable
 data object Settings
+
+@Serializable
+data object Login
+
+@Serializable
+data object Cadastro

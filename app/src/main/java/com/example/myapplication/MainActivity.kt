@@ -20,12 +20,6 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 AppNavigation(navController = navController)
-                    //ChatsScreen(irParaChat = {}, modifier = Modifier.padding(innerPadding))
-                    //Conversas(modifier = Modifier.padding(innerPadding))
-                    //ChatView(modifier = Modifier.padding(innerPadding))
-                    //SettingsView(modifier = Modifier.padding(innerPadding))
-                    //Conversas(modifier = Modifier.padding(innerPadding))
-                    //SettingsScreen(modifier = Modifier.padding(innerPadding))
 
             }
         }
