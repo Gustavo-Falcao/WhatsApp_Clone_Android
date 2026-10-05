@@ -8,15 +8,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,10 +33,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.R
 import com.example.myapplication.auth.AuthManager
+import com.example.myapplication.ui.theme.GreenInputLine
 import com.example.myapplication.ui.theme.GreenPrimary
 
 
@@ -61,25 +71,72 @@ fun LoginScreen(
 
             Text(text = "Log In", fontSize = 24.sp, fontWeight = FontWeight.W500)
 
-            Spacer(Modifier.height(30.dp))
+            Spacer(Modifier.height(20.dp))
 
-            OutlinedTextField(
-                value = nome,
-                onValueChange = {nome = it},
-                label = {Text("Nome")},
-                modifier = Modifier.widthIn(max = 200.dp)
-            )
+            Column(modifier = Modifier.widthIn(max = 300.dp)) {
+                OutlinedTextField(
+                    value = nome,
+                    onValueChange = {nome = it},
+                    label = {Text("Nome")},
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = GreenInputLine
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            Spacer(Modifier.height(15.dp))
+                OutlinedTextField(
+                    value = telefone,
+                    onValueChange = {telefone = it},
+                    label = {Text("Telefone")},
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.phone_icon),
+                            contentDescription = "Phone icon",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = GreenInputLine
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
 
-            OutlinedTextField(
-                value = telefone,
-                onValueChange = {telefone = it},
-                label = {Text("Telefone")},
-                modifier = Modifier.widthIn(max = 200.dp)
-            )
+                Spacer(Modifier.height(20.dp))
 
-            Spacer(Modifier.height(5.dp))
+                Button(
+                    onClick = {
+                        if(AuthManager.login(nome, telefone)) {
+                            Toast.makeText(
+                                context,
+                                "Login feito com sucesso!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            irHome()
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Telefone inválido",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = GreenPrimary
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Login")
+                }
+            }
+
+            Spacer(Modifier.height(10.dp))
 
             Row() {
                 Text("Don't have an account ?")
@@ -93,29 +150,6 @@ fun LoginScreen(
                     )
                 )
             }
-
-            Spacer(Modifier.height(30.dp))
-
-            Button(
-                onClick = {
-                    if(AuthManager.login(nome, telefone)) {
-                        irHome()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "Telefone inválido",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = GreenPrimary,
-                    contentColor = Color.Black
-                )
-                ) {
-                Text("Login")
-            }
-
         }
 
 

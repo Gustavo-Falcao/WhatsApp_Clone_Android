@@ -6,19 +6,27 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -37,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.BlueCheckMessage
+import com.example.myapplication.ui.theme.GrayBox
 import com.example.myapplication.ui.theme.GrayInfoBoxMessage
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
@@ -50,16 +59,28 @@ fun ChatScreen(
     voltar: () -> Unit
 ) {
     Scaffold(
-        topBar = {TopBarChat(voltar)}
+        topBar = {TopBarChat(voltar)},
+        bottomBar = {BottomBarChat()}
     ) { innerPadding ->
-        Column(
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = MainBackGroundColor)
+//                .padding(innerPadding)
+//        ) {
+//            BodyChat(modifier = Modifier.weight(1f))
+//            //BottomChat()
+//        }
+
+        LazyColumn(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = MainBackGroundColor)
-                .padding(innerPadding)
+                .fillMaxWidth()
+                .consumeWindowInsets(innerPadding)
+                .background(color = MainBackGroundColor),
+
+            contentPadding = innerPadding
         ) {
-            BodyChat(modifier = Modifier.weight(1f))
-            BottomChat()
+            item { BodyChat() }
         }
     }
 }
@@ -97,6 +118,7 @@ fun TopBarChat(voltar: () -> Unit) {
                     Text(
                         text = "Nome Contato",
                         color = Color.White,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
@@ -139,141 +161,96 @@ fun TopBarChat(voltar: () -> Unit) {
 }
 
 @Composable
-fun HeaderChat(voltar: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(color = GreenBackGroundNavBar)
-            .padding(vertical = 15.dp)
-            .padding(horizontal = 5.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.arrow_back_icon),
-                contentDescription = "Arrow back",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-                    .clickable(onClick = voltar)
-            )
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(50.dp))
-                    .background(color = GrayTextForeGround)
-                    .padding(10.dp)
-            ){
-                Icon(
-                    painter = painterResource(id = R.drawable.account_circle_icon),
-                    contentDescription = "Arrow back",
-                    tint = Color.White,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-            Column() {
-                Text(
-                    text = "Nome Contato",
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = "Status",
-                    color = Color.White,
-                    fontSize = 12.sp
-
-                )
-            }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.videocam_icon),
-                contentDescription = "Video cam",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.phone_icon),
-                contentDescription = "Phone call",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.settings_icon),
-                contentDescription = "Settings",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun BottomChat() {
+fun BottomBarChat() {
     var textMsg by remember() { mutableStateOf("") }
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 5.dp)
-            .padding(top = 10.dp)
-            .padding(bottom = 5.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        OutlinedTextField(
-            value = textMsg,
-            onValueChange = {textMsg = it},
-            modifier = Modifier
-                .clip(RoundedCornerShape(30.dp))
-                .widthIn(250.dp),
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.add_reaction_icon),
-                    contentDescription = "Add reaction",
-                    tint = GrayTextForeGround,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            trailingIcon = {
-                Row(
+
+    BottomAppBar(
+        containerColor = GreenBackGroundNavBar,
+        actions = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TextField(
+                    value = textMsg,
+                    onValueChange = {textMsg = it},
                     modifier = Modifier
-                        .padding(end = 5.dp),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        .clip(RoundedCornerShape(30.dp)),
+                        //.fillMaxWidth(),//250dp
+                    singleLine = true,
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = R.drawable.add_reaction_icon),
+                            contentDescription = "Add reaction",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    },
+                    trailingIcon = {
+                        Row(
+                            modifier = Modifier
+                                .padding(end = 10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.attach_file_icon),
+                                contentDescription = "Attach file icon",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Icon(
+                                painter = painterResource(id = R.drawable.photo_camera_icon),
+                                contentDescription = "Photo camera icon",
+                                tint = Color.Gray,
+                                modifier = Modifier.size(22.dp)
+                            )
+                        }
+                    },
+                    colors = TextFieldDefaults.colors(
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent,
+                        focusedContainerColor = GrayBox,
+                        unfocusedContainerColor = GrayBox,
+                        unfocusedTextColor = Color.White,
+                        focusedTextColor = Color.White
+                    )
+                )
+
+                IconButton(
+                    onClick = {},
+                    colors = IconButtonDefaults.iconButtonColors(
+                        containerColor = GreenPrimary
+                    ),
+                    shape = IconButtonDefaults.standardShape
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.attach_file_icon),
-                        contentDescription = "Attach file icon",
-                        tint = GrayTextForeGround,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Icon(
-                        painter = painterResource(id = R.drawable.photo_camera_icon),
-                        contentDescription = "Photo camera icon",
-                        tint = GrayTextForeGround,
-                        modifier = Modifier.size(24.dp)
+                        painter = painterResource(id = R.drawable.mic_icon),
+                        contentDescription = "Audio icon",
+                        tint = Color.White,
+                        modifier = Modifier.size(22.dp)
                     )
                 }
+//                Box(
+//                    modifier = Modifier
+//                        .clip(RoundedCornerShape(50.dp))
+//                        .background(color = GreenPrimary)
+//                        .padding(10.dp)
+//                ){
+//                    Icon(
+//                        painter = painterResource(id = R.drawable.mic_icon),
+//                        contentDescription = "Arrow back",
+//                        tint = Color.White,
+//                        modifier = Modifier.size(24.dp)
+//                    )
+
             }
-        )
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(50.dp))
-                .background(color = GreenPrimary)
-                .padding(10.dp)
-        ){
-            Icon(
-                painter = painterResource(id = R.drawable.mic_icon),
-                contentDescription = "Arrow back",
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-            )
         }
-    }
+    )
+
 }
 
 @Composable
@@ -282,7 +259,6 @@ fun BodyChat(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .padding(top = 2.dp)
-            .verticalScroll(rememberScrollState())
     ) {
         BadgeInfo("Today")
 

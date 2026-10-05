@@ -17,13 +17,17 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -37,6 +41,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +56,7 @@ import com.example.myapplication.ui.theme.GreenSecondary
 import com.example.myapplication.ui.theme.GreenShadow
 import com.example.myapplication.ui.theme.MainBackGroundColor
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import java.time.format.TextStyle
 
 @Composable
 fun ChatsScreen(irParaChat: () -> Unit, modifier: Modifier = Modifier) {
@@ -174,11 +180,31 @@ fun HeaderChats() {
         TextField(
             value = search,
             onValueChange = {search = it},
-            label = {Text("Search")},
+            placeholder = {Text("Search")},
             modifier = Modifier
                 .clip(RoundedCornerShape(30.dp))
                 .fillMaxWidth(),
-            singleLine = true
+            singleLine = true,
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.search_icon),
+                    contentDescription = "Search icon",
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp),
+                )
+            },
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                errorIndicatorColor = Color.Transparent,
+                focusedContainerColor = GrayBox,
+                unfocusedContainerColor = GrayBox,
+                unfocusedPlaceholderColor = Color.Gray,
+                focusedPlaceholderColor = Color.Gray,
+                unfocusedTextColor = Color.White,
+                focusedTextColor = Color.White
+            )
         )
 
         Row(
