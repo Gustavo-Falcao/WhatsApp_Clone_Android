@@ -1,5 +1,11 @@
 package com.example.myapplication.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +15,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -59,25 +67,17 @@ fun ChatScreen(
     voltar: () -> Unit
 ) {
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding(),
         topBar = {TopBarChat(voltar)},
         bottomBar = {BottomBarChat()}
     ) { innerPadding ->
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = MainBackGroundColor)
-//                .padding(innerPadding)
-//        ) {
-//            BodyChat(modifier = Modifier.weight(1f))
-//            //BottomChat()
-//        }
-
         LazyColumn(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .consumeWindowInsets(innerPadding)
                 .background(color = MainBackGroundColor),
-
             contentPadding = innerPadding
         ) {
             item { BodyChat() }
@@ -163,6 +163,8 @@ fun TopBarChat(voltar: () -> Unit) {
 @Composable
 fun BottomBarChat() {
     var textMsg by remember() { mutableStateOf("") }
+    var showPhotoIcon = textMsg.isBlank()
+    var showSendIcon = textMsg.isNotBlank()
 
     BottomAppBar(
         containerColor = GreenBackGroundNavBar,
@@ -192,7 +194,7 @@ fun BottomBarChat() {
                         Row(
                             modifier = Modifier
                                 .padding(end = 10.dp),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.attach_file_icon),
@@ -200,12 +202,36 @@ fun BottomBarChat() {
                                 tint = Color.Gray,
                                 modifier = Modifier.size(22.dp)
                             )
-                            Icon(
-                                painter = painterResource(id = R.drawable.photo_camera_icon),
-                                contentDescription = "Photo camera icon",
-                                tint = Color.Gray,
-                                modifier = Modifier.size(22.dp)
-                            )
+                            AnimatedVisibility(
+                                visible = showPhotoIcon,
+
+                                enter = expandHorizontally(
+                                    expandFrom = Alignment.End,
+                                    animationSpec = tween(250)
+                                ) + fadeIn(
+                                    animationSpec = tween(200)
+                                ),
+
+                                exit = shrinkHorizontally(
+                                    shrinkTowards = Alignment.End,
+                                    animationSpec = tween(250)
+                                ) + fadeOut(
+                                    animationSpec = tween(150)
+                                )
+                            ) {
+                                Box() {
+                                    IconButton(
+                                        onClick = {}
+                                    ) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.photo_camera_icon),
+                                            contentDescription = "Add photo",
+                                            tint = Color.Gray,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
+                                }
+                            }
                         }
                     },
                     colors = TextFieldDefaults.colors(
@@ -227,26 +253,22 @@ fun BottomBarChat() {
                     ),
                     shape = IconButtonDefaults.standardShape
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.mic_icon),
-                        contentDescription = "Audio icon",
-                        tint = Color.White,
-                        modifier = Modifier.size(22.dp)
-                    )
+                    if (showSendIcon) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.send_icon),
+                            contentDescription = "Send icon",
+                            tint = Color.White,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    } else {
+                        Icon(
+                            painter = painterResource(id = R.drawable.mic_icon),
+                            contentDescription = "Audio icon",
+                            tint = Color.White,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
                 }
-//                Box(
-//                    modifier = Modifier
-//                        .clip(RoundedCornerShape(50.dp))
-//                        .background(color = GreenPrimary)
-//                        .padding(10.dp)
-//                ){
-//                    Icon(
-//                        painter = painterResource(id = R.drawable.mic_icon),
-//                        contentDescription = "Arrow back",
-//                        tint = Color.White,
-//                        modifier = Modifier.size(24.dp)
-//                    )
-
             }
         }
     )
