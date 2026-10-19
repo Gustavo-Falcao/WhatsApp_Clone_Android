@@ -1,5 +1,7 @@
 package com.example.myapplication.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,10 +15,23 @@ import com.example.myapplication.ui.screens.MainScreen
 fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Login
+        startDestination = Main
     ) {
 
-        composable<Chat> {
+        composable<Chat>(
+            enterTransition = {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(900)
+                )
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(900)
+                )
+            }
+        ) {
             ChatScreen(
                 voltar = {
                     navController.popBackStack()
@@ -46,7 +61,7 @@ fun AppNavigation(navController: NavHostController) {
         composable<Cadastro> {
             CadastroScreen(
                 irLogin = {
-                    navController.navigate(Login)
+                    navController.popBackStack()
                 }
             )
         }
