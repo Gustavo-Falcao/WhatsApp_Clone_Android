@@ -120,9 +120,7 @@ fun CadastroScreen(irLogin: () -> Unit) {
                             ).show()
                         }
                         else {
-                            if(AuthManager.cadastrar(nome, telefone)) {
-                                irLogin()
-                            }
+                            //fazer cadastrar
                         }
                     },
                     colors = ButtonDefaults.buttonColors(

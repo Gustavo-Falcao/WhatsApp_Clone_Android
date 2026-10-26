@@ -3,9 +3,11 @@ package com.example.myapplication.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.myapplication.ui.screens.CadastroScreen
 import com.example.myapplication.ui.screens.ChatScreen
 import com.example.myapplication.ui.screens.LoginScreen
@@ -13,6 +15,9 @@ import com.example.myapplication.ui.screens.MainScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
+    val entradaAtual by navController.currentBackStackEntryAsState()
+    val destino = entradaAtual?.destination
+
     NavHost(
         navController = navController,
         startDestination = Main

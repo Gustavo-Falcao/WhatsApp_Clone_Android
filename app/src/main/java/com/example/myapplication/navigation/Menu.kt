@@ -16,13 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.myapplication.R
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
 import com.example.myapplication.ui.theme.GreenPrimary
@@ -34,19 +37,12 @@ import com.example.myapplication.ui.theme.GreenShadow
 fun Menu(
     navController: NavHostController
 ) {
+    val entradaAtual by navController.currentBackStackEntryAsState()
+    val destino = entradaAtual?.destination
+    val isChatActivate = destino?.hasRoute<Chats>() ?: false
+    val isSettingActivate = destino?.hasRoute<Settings>() ?: false
+
     BottomAppBar(
-//        actions = {
-//            TextButton(onClick = {
-//                navController.navigate(Chats)
-//            }) {
-//                Text("Chats")
-//            }
-//            TextButton(onClick = {
-//                navController.navigate(Settings)
-//            }) {
-//                Text("Settings")
-//            }
-//        }
         containerColor = GreenBackGroundNavBar,
         actions = {
             Row(
@@ -64,10 +60,10 @@ fun Menu(
                     Icon(
                         painter = painterResource(id = R.drawable.chat_icon),
                         contentDescription = "Chat icon",
-                        tint = GreenPrimary,
+                        tint = if (isChatActivate) GreenPrimary else Color.White,
                         modifier = Modifier
                             .clip(RoundedCornerShape(20.dp))
-                            .background(color = GreenShadow)
+                            .background(color = if (isChatActivate) GreenShadow else Color.Transparent)
                             .padding(10.dp)
                             .size(24.dp)
                     )
@@ -121,9 +117,10 @@ fun Menu(
                     Icon(
                         painter = painterResource(id = R.drawable.account_circle_icon),
                         contentDescription = "Account icon",
-                        tint = Color.White,
+                        tint = if (isSettingActivate) GreenPrimary else Color.White,
                         modifier = Modifier
                             .clip(RoundedCornerShape(20.dp))
+                            .background(color = if (isSettingActivate) GreenShadow else Color.Transparent)
                             .padding(10.dp)
                             .size(24.dp)
                     )
@@ -135,21 +132,4 @@ fun Menu(
             }
         }
     )
-//    TopAppBar(
-//        title = {
-//            Text("Minha aplicacao")
-//        },
-//        actions = {
-//            TextButton(onClick = {
-//                navController.navigate(Chats)
-//            }) {
-//                Text("Chats")
-//            }
-//            TextButton(onClick = {
-//                navController.navigate(Settings)
-//            }) {
-//                Text("Settings")
-//            }
-//        }
-//    )
 }

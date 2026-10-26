@@ -59,4 +59,31 @@ internal class UsuarioDAO(context: Context) {
             }
         }
     }
+
+    fun buscarPorId(id: Long, nome: String, hash: ByteArray? = null, salt: ByteArray? = null) {
+        AppDatabase(appContext).use { db ->
+            val valores = ContentValues().apply {
+                put("nome", nome)
+                if(hash != null) put("senha", hash)
+                if(salt != null) put("salt", salt)
+            }
+            val alterado = db.writableDatabase.update(
+                "usuarios",
+                valores, "id = ?", arrayOf(id.toString())
+            )
+            require(alterado == 1) {"Usuario não encontrado, Atualize a lista"}
+        }
+    }
+
+    fun excluir(id: Long, usuarioAtualId: Long) {
+        require(usuarioAtualId > 0) {"Faça login para continuar"}
+        require(id != usuarioAtualId) {"Você não pode excluir o seu usuário"}
+        AppDatabase(appContext).use { db ->
+            val excluido = db.writableDatabase.delete(
+                "usuarios", "id = ? AND id <> ?",
+                arrayOf(id.toString(), usuarioAtualId.toString())
+            )
+            require(excluido == 1) {"Usuario não encontrado, Atualize a lista"}
+        }
+    }
 }

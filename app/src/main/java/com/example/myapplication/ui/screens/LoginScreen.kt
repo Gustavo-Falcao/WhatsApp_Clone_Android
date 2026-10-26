@@ -112,20 +112,20 @@ fun LoginScreen(
 
                 Button(
                     onClick = {
-                        if(AuthManager.login(nome, telefone)) {
-                            Toast.makeText(
-                                context,
-                                "Login feito com sucesso!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            irHome()
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Telefone inválido",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+//                        if(AuthManager.login(nome, telefone)) {
+//                            Toast.makeText(
+//                                context,
+//                                "Login feito com sucesso!",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                            irHome()
+//                        } else {
+//                            Toast.makeText(
+//                                context,
+//                                "Telefone inválido",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = GreenPrimary
