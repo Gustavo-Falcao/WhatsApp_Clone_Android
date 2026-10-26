@@ -31,7 +31,7 @@ fun MainScreen(
                 .padding(innerPadding)
                 .consumeWindowInsets(innerPadding)
         ) {
-            composable<Chats> {
+            composable<Chats>{
                 ChatsScreen(irParaChat = irParaChat)
             }
 

@@ -1,23 +1,33 @@
 package com.example.myapplication.auth
 
 import android.provider.ContactsContract
+import java.security.MessageDigest
+import java.security.SecureRandom
+import javax.crypto.SecretKey
+import javax.crypto.SecretKeyFactory
+import javax.crypto.spec.PBEKeySpec
 
 object AuthManager {
-    data class User(
-        val nome: String,
-        val telefone: String
-    )
+    private const val ITERACOES = 60_000
 
-    private val usuarios = mutableListOf<User>()
+    fun criarSalt(): ByteArray = ByteArray(16).also { SecureRandom().nextBytes(it) }
 
-    fun login(nome: String, telefone: String): Boolean {
-        return usuarios.any { it.telefone == telefone }
+    fun gerarHash(senha: String, salt: ByteArray): ByteArray {
+        val spec = PBEKeySpec(senha.toCharArray(), salt, ITERACOES, 256)
+        return try {
+            SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1")
+                .generateSecret(spec).encoded
+        } finally {
+            spec.clearPassword()
+        }
     }
 
-    fun cadastrar(nome: String, telefone: String): Boolean {
-        if(usuarios.any { it.telefone == telefone }) return false
-
-        usuarios.add(User(nome, telefone))
-        return true
+    fun validarSenha(senha: String, salt: ByteArray, senhaDB: ByteArray): Boolean {
+        val calculo = gerarHash(senha, salt)
+        return try {
+            MessageDigest.isEqual(senhaDB, calculo)
+        } finally {
+            calculo.fill(0)
+        }
     }
 }
