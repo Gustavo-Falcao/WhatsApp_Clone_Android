@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -34,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Greeting
 import com.example.myapplication.R
+import com.example.myapplication.ui.screens.sheets.HomeBottomSheet
 import com.example.myapplication.ui.theme.BlueCheckMessage
 import com.example.myapplication.ui.theme.GrayBox
 import com.example.myapplication.ui.theme.GrayTextForeGround
@@ -60,9 +63,11 @@ import java.time.format.TextStyle
 
 @Composable
 fun ChatsScreen(irParaChat: () -> Unit, modifier: Modifier = Modifier) {
+    var showSheet by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
-        topBar = {TopBarChats()}
+        topBar = {TopBarChats()},
+        floatingActionButton = { FloatingButton(onClick = { showSheet = true }) }
     ) { innerPadding ->
         LazyColumn (
             modifier = Modifier
@@ -82,21 +87,7 @@ fun ChatsScreen(irParaChat: () -> Unit, modifier: Modifier = Modifier) {
                 val showSeparatorLine = index != 14
                 ContatoElement(isNotificationViewd, showSeparatorLine, irParaChat)
             }
-            //HeaderChats()
 
-//            Column(
-//                modifier = Modifier
-//                    .padding(vertical = 20.dp)
-//                    //.weight(1f)
-//                    .verticalScroll(rememberScrollState()),
-//                verticalArrangement = Arrangement.spacedBy(15.dp)
-//            ) {
-//                for (i in 1 . 15) {
-//                    val isNotificationViewd = i % 2 == 0
-//                    val showSeparatorLine = i != 15
-//                    ContatoElement(isNotificationViewd, showSeparatorLine, irParaChat)
-//                }
-//            }
 //            Box() {
 //                Icon(
 //                    painter = painterResource(id = R.drawable.chat_add),
@@ -116,6 +107,27 @@ fun ChatsScreen(irParaChat: () -> Unit, modifier: Modifier = Modifier) {
 //            }
         }
     }
+
+    if(showSheet) {
+        HomeBottomSheet(
+            onDismiss = { showSheet = false }
+        )
+    }
+}
+
+@Composable
+fun FloatingButton(onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = onClick,
+        containerColor = GreenPrimary,
+        contentColor = Color.Black
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.chat_add),
+            contentDescription = "Adicionar chat",
+            modifier = Modifier.size(24.dp)
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,18 +143,6 @@ fun TopBarChats() {
                )
            },
             actions = {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.photo_camera_icon),
-//                    contentDescription = "Photo camera icon",
-//                    tint = Color.White,
-//                    modifier = Modifier.size(24.dp)
-//                )
-//                Icon(
-//                    painter = painterResource(id = R.drawable.settings_icon),
-//                    contentDescription = "Settings icon",
-//                    tint = Color.White,
-//                    modifier = Modifier.size(24.dp)
-//                )
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
@@ -203,7 +203,8 @@ fun HeaderChats() {
                 unfocusedPlaceholderColor = Color.Gray,
                 focusedPlaceholderColor = Color.Gray,
                 unfocusedTextColor = Color.White,
-                focusedTextColor = Color.White
+                focusedTextColor = Color.White,
+                cursorColor = GreenPrimary
             )
         )
 

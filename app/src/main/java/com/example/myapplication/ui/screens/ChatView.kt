@@ -242,7 +242,8 @@ fun BottomBarChat() {
                         focusedContainerColor = GrayBox,
                         unfocusedContainerColor = GrayBox,
                         unfocusedTextColor = Color.White,
-                        focusedTextColor = Color.White
+                        focusedTextColor = Color.White,
+                        cursorColor = GreenPrimary
                     )
                 )
 

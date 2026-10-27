@@ -11,6 +11,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val MainBackGroundColor = Color(0xFF081015)
+val SheetBackGround = Color(0xFF081015)
 val GrayBox = Color(0xFF21282B)
 val GreenPrimary = Color(0xFF00C357)
 val GreenSecondary = Color(0xFF003628)

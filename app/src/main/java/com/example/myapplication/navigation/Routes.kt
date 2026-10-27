@@ -19,3 +19,9 @@ data object Login
 
 @Serializable
 data object Cadastro
+
+@Serializable
+data object FormNovoContato
+
+@Serializable
+data object NovoChat
