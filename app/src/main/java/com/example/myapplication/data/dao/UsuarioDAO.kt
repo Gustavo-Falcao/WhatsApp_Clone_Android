@@ -5,7 +5,7 @@ import android.content.Context
 import com.example.myapplication.data.Usuario
 import com.example.myapplication.data.local.AppDatabase
 
-internal class SenhaSalva(val hash: ByteArray, val salt: ByteArray)
+internal class SenhaSalva(val hash: ByteArray, val salt: ByteArray, val usuarioId: Long)
 
 internal class UsuarioDAO(context: Context) {
     private val  appContext = context.applicationContext
@@ -30,14 +30,15 @@ internal class UsuarioDAO(context: Context) {
         return AppDatabase(appContext).use { db ->
             db.readableDatabase.query(
                 "usuarios",
-                arrayOf("senha", "salt"),
+                arrayOf("senha", "salt", "id"),
                 "telefone = ?",
                 arrayOf(teleone),
                 null, null, null
             ).use { usuario ->
                 if (usuario.moveToFirst()) SenhaSalva(
                     usuario.getBlob(0),
-                    usuario.getBlob(1))
+                    usuario.getBlob(1),
+                    usuario.getLong(2))
                 else null
             }
         }

@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,7 +21,7 @@ fun AppNavigation(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = Main
+        startDestination = Login
     ) {
 
         composable<Chat>(
@@ -57,9 +58,12 @@ fun AppNavigation(navController: NavHostController) {
                 irCadastro = {
                     navController.navigate(Cadastro)
                 },
-                irHome = {
-                    navController.navigate(Main)
-                }
+                onLoginSuccess = {
+                    navController.navigate(Main) {
+                        popUpTo(Login) {inclusive = true}
+                    }
+                },
+                authViewModel = viewModel()
             )
         }
 
@@ -67,7 +71,8 @@ fun AppNavigation(navController: NavHostController) {
             CadastroScreen(
                 irLogin = {
                     navController.popBackStack()
-                }
+                },
+                authViewModel = viewModel()
             )
         }
 

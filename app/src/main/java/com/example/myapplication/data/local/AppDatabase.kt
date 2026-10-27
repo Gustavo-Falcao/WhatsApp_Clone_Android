@@ -15,7 +15,7 @@ internal class AppDatabase(context: Context): SQLiteOpenHelper(
         db.execSQL(""" 
             CREATE TABLE usuarios(
             id INTEGER PRIMARY KEY,
-            nome TEXT NOT NULL CHECK(length(name) BETWEEN 3 AND 100),
+            nome TEXT NOT NULL CHECK(length(nome) BETWEEN 3 AND 100),
             telefone TEXT NOT NULL UNIQUE,
             senha BLOB NOT NULL,
             salt BLOB NOT NULL

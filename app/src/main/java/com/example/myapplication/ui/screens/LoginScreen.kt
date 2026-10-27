@@ -24,6 +24,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,17 +43,27 @@ import com.example.myapplication.R
 import com.example.myapplication.auth.AuthManager
 import com.example.myapplication.ui.theme.GreenInputLine
 import com.example.myapplication.ui.theme.GreenPrimary
+import com.example.myapplication.ui.viewmodel.AuthViewModel
 
 
 @Composable
 fun LoginScreen(
     irCadastro: () -> Unit,
-    irHome: () -> Unit
+    onLoginSuccess: () -> Unit,
+    authViewModel: AuthViewModel
 ) {
 
     var telefone by remember { mutableStateOf("") }
-    var nome by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
     var context = LocalContext.current
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(authViewModel.concluido) {
+        if (authViewModel.concluido) {
+            authViewModel.consumirResultado()
+            onLoginSuccess()
+        }
+    }
 
     Scaffold() { innerPadding ->
         Column(
@@ -74,17 +85,6 @@ fun LoginScreen(
             Spacer(Modifier.height(20.dp))
 
             Column(modifier = Modifier.widthIn(max = 300.dp)) {
-                OutlinedTextField(
-                    value = nome,
-                    onValueChange = {nome = it},
-                    label = {Text("Nome")},
-                    singleLine = true,
-                    shape = RoundedCornerShape(8.dp),
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = GreenInputLine
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
 
                 OutlinedTextField(
                     value = telefone,
@@ -108,10 +108,23 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
 
+                OutlinedTextField(
+                    value = senha,
+                    onValueChange = {senha = it},
+                    label = {Text("Senha")},
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = GreenInputLine
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
                 Spacer(Modifier.height(20.dp))
 
                 Button(
                     onClick = {
+                        authViewModel.login(telefone, senha)
 //                        if(AuthManager.login(nome, telefone)) {
 //                            Toast.makeText(
 //                                context,
@@ -127,6 +140,7 @@ fun LoginScreen(
 //                            ).show()
 //                        }
                     },
+                    enabled = !authViewModel.carregando,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = GreenPrimary
                     ),
@@ -150,8 +164,17 @@ fun LoginScreen(
                     )
                 )
             }
+            Text("Erro aqui: $errorMessage")
         }
 
+        if (authViewModel.mensagem != null) {
+            Toast.makeText(
+                context,
+                authViewModel.mensagem,
+                Toast.LENGTH_SHORT
+            ).show()
+            errorMessage = authViewModel.mensagem
+        }
 
     }
 }

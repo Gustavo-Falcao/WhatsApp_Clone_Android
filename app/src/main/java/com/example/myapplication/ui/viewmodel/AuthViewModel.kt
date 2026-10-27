@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.auth.AuthManager
+import com.example.myapplication.auth.SessaoUsuario
 import com.example.myapplication.data.dao.UsuarioDAO
 import com.example.myapplication.validation.CadastroValidator
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,7 @@ class AuthViewModel(application: Application): AndroidViewModel(application) {
     var concluido by mutableStateOf(false)
         private set
 
-    private fun executar(op: () -> Boolean) {
+    private fun executar(op: suspend () -> Boolean) {
         if(carregando || concluido) return
         carregando = true
         mensagem = null
@@ -37,7 +38,7 @@ class AuthViewModel(application: Application): AndroidViewModel(application) {
             } catch (e: IllegalStateException) {
                 mensagem = e.message
             } catch (e: Exception) {
-                mensagem = "Ocorreu um erro inseperado"
+                mensagem = "Ocorreu um erro inseperado -> $e"
             } finally {
                 carregando = false
             }
@@ -61,20 +62,26 @@ class AuthViewModel(application: Application): AndroidViewModel(application) {
     }
 
     fun login(telefone: String, senha: String) = executar {
-        require(telefone.length <= 11 && senha.length in 6 .. 128) {
+        require(telefone.length <= 11 && senha.length in 5 .. 128) {
             "Telefone ou senha inválidos"
         }
 
-        val dados = dao.buscarSenha(telefone.trim())
-        val senhaHash = dados?.hash ?: ByteArray(32)
-        val salt = dados?.salt ?: ByteArray(16)
+        val idAutenticado = withContext(Dispatchers.IO) {
+            val dados = dao.buscarSenha(telefone.trim())
+            val senhaHash = dados?.hash ?: ByteArray(32)
+            val salt = dados?.salt ?: ByteArray(16)
 
-        try {
-            val autenticado = AuthManager.validarSenha(senha, salt, senhaHash)
-            dados != null && autenticado
-        } finally {
-            senhaHash.fill(0)
+            try {
+                val autenticado = AuthManager.validarSenha(senha, salt, senhaHash)
+                if(autenticado) dados?.usuarioId else null
+            } finally {
+                senhaHash.fill(0)
+            }
         }
+        if(idAutenticado != null) {
+            SessaoUsuario.iniciar(idAutenticado)
+            true
+        } else false
     }
 
     fun consumirResultado(){ concluido = false }

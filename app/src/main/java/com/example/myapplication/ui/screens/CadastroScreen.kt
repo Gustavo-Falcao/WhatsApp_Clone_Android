@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,12 +48,25 @@ import com.example.myapplication.R
 import com.example.myapplication.auth.AuthManager
 import com.example.myapplication.ui.theme.GreenInputLine
 import com.example.myapplication.ui.theme.GreenPrimary
+import com.example.myapplication.ui.viewmodel.AuthViewModel
 
 @Composable
-fun CadastroScreen(irLogin: () -> Unit) {
+fun CadastroScreen(
+    irLogin: () -> Unit,
+    authViewModel: AuthViewModel
+) {
     var telefone by remember { mutableStateOf("") }
     var nome by remember { mutableStateOf("") }
+    var senha by remember { mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+
+    LaunchedEffect(authViewModel.concluido) {
+        if (authViewModel.concluido) {
+            authViewModel.consumirResultado()
+            irLogin()
+        }
+    }
 
     Scaffold() { innerPadding ->
         Column(
@@ -108,6 +122,18 @@ fun CadastroScreen(irLogin: () -> Unit) {
                     modifier = Modifier.fillMaxWidth()
                 )
 
+                OutlinedTextField(
+                    value = senha,
+                    onValueChange = {senha = it},
+                    label = {Text("Senha")},
+                    singleLine = true,
+                    shape = RoundedCornerShape(8.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = GreenInputLine
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
@@ -120,9 +146,11 @@ fun CadastroScreen(irLogin: () -> Unit) {
                             ).show()
                         }
                         else {
-                            //fazer cadastrar
+                            authViewModel.cadastrar(nome, telefone, senha)
+                            senha = ""
                         }
                     },
+                    enabled = !authViewModel.carregando,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = GreenPrimary
                     ),
@@ -145,8 +173,18 @@ fun CadastroScreen(irLogin: () -> Unit) {
                         onClick = irLogin
                     )
                 )
+
             }
+            Text("Erro aqui: $errorMessage")
         }
 
+        if (authViewModel.mensagem != null) {
+            Toast.makeText(
+                context,
+                authViewModel.mensagem,
+                Toast.LENGTH_SHORT
+            ).show()
+            errorMessage = authViewModel.mensagem
+        }
     }
 }

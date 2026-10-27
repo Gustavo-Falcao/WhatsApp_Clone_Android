@@ -8,15 +8,11 @@ object CadastroValidator {
             "Informe um nome de até 100 caracteres"
         }
 
-        require(telefone.length <= 11 &&
-                Patterns
-                    .PHONE
-                    .matcher(telefone)
-                    .matches()) {
+        require(telefone.length <= 11) {
             "Informe um telefone válido"
         }
 
-        require(senha.length in 8 .. 100) {
+        require(senha.length in 2 .. 100) {
             "Informe uma senha valida"
         }
     }
