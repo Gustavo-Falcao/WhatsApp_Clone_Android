@@ -61,7 +61,7 @@ internal class UsuarioDAO(context: Context) {
         }
     }
 
-    fun buscarPorId(id: Long, nome: String, hash: ByteArray? = null, salt: ByteArray? = null) {
+    fun alterarPorId(id: Long, nome: String, hash: ByteArray? = null, salt: ByteArray? = null) {
         AppDatabase(appContext).use { db ->
             val valores = ContentValues().apply {
                 put("nome", nome)
@@ -74,6 +74,22 @@ internal class UsuarioDAO(context: Context) {
             )
             require(alterado == 1) {"Usuario não encontrado, Atualize a lista"}
         }
+    }
+
+    fun existsPorId(id: Long): Boolean {
+        val cursor = AppDatabase(appContext).use { db ->
+            db.readableDatabase
+            db.readableDatabase.query(
+                "usuarios",
+                arrayOf("id"),
+                "id = ?",
+                arrayOf(id.toString()),
+                null, null, null, "1"
+            )
+        }
+        val existeUser: Boolean = cursor.count > 0
+        cursor.close()
+        return existeUser
     }
 
     fun excluir(id: Long, usuarioAtualId: Long) {

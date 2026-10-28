@@ -19,6 +19,17 @@ internal class AppDatabase(context: Context): SQLiteOpenHelper(
             telefone TEXT NOT NULL UNIQUE,
             senha BLOB NOT NULL,
             salt BLOB NOT NULL
+            );
+        """.trimIndent())
+
+        db.execSQL("""
+            CREATE TABLE contatos(
+            id INTEGER PRIMARY KEY,
+            usuario_id INTEGER NOT NULL,
+            contato_usuario_id INTEGER NOT NULL,
+            saved_name INTEGER NOT NULL,
+            FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+            FOREIGN KEY (contato_usuario_id) REFERENCES usuarios(id)
             )
         """.trimIndent())
     }
