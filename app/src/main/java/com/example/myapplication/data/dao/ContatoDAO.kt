@@ -8,25 +8,33 @@ import com.example.myapplication.data.local.AppDatabase
 internal class ContatoDAO(context: Context) {
     private val appContext = context.applicationContext
 
-    fun cadastrar(remetenteId: String, destinatarioId: String, conteudo: String, savedName: String) {
+    fun cadastrar(usuarioId: Long, usuarioContatoId: Long, nomeContato: String) {
         AppDatabase(appContext).use { db ->
             val dados = ContentValues().apply {
-                put("remetente_id", remetenteId)
-                put("destinatario_id", destinatarioId)
-                put("conteudo", conteudo)
+                put("usuario_id", usuarioId)
+                put("usuario_contato_id", usuarioContatoId)
+                put("nome", nomeContato)
             }
             db.writableDatabase.insertOrThrow(
-                "mensagens",
+                "contatos",
                 null,
                 dados
             )
         }
     }
-
-    fun listar(): List<Contato> = AppDatabase(appContext).use { db ->
+    //listagem de contatos será por id do usuário atual e ordenando por nome
+    //colocar clausula para pegar os contatos que tem o usuarioId igual ao do usuário atual
+    fun listarPorUsuarioId(usuarioAtualId: Long): List<Contato> = AppDatabase(appContext).use { db ->
+        //funcao exigirUsuario do sessao usuario
+        //usar normalmente o usuarioId so sessao usuario apos
         db.readableDatabase.query(
-            "mensagens", arrayOf("id", "remetente_id", "destinatario_id", "conteudo", "data_envio"),
-            null, null, null, null, null
+            "contatos",
+            arrayOf("id", "usuario_id", "usuario_contato_id", "nome"),
+            "id = ?",
+            arrayOf(usuarioAtualId.toString()),
+            null,
+            null,
+            "nome COLLATE NOCASE, id"
         ).use { cursor ->
             buildList {
                 while (cursor.moveToNext()) {
@@ -42,7 +50,7 @@ internal class ContatoDAO(context: Context) {
     }
 
     fun excluir(id: Long, usuarioAtualId: Long) {
-        require(id != usuarioAtualId) {"Você não pode excluir o seu usuário"}
+        require(id != usuarioAtualId) {"Você não pode excluir o seu contato"}
         AppDatabase(appContext).use { db ->
             val excluido = db.writableDatabase.delete(
                 "contatos", "id = ?",

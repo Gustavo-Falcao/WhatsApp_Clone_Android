@@ -44,22 +44,22 @@ internal class UsuarioDAO(context: Context) {
         }
     }
 
-    fun listar(): List<Usuario> = AppDatabase(appContext).use { db ->
-        db.readableDatabase.query(
-            "usuarios", arrayOf("id", "nome", "telefone"),
-            null, null, null, null, "nome COLLATE NOCASE, id"
-        ).use { usuario ->
-            buildList {
-                while (usuario.moveToNext()) {
-                    add(Usuario(
-                        usuario.getLong(0),
-                        usuario.getString(1),
-                        usuario.getString(2)
-                    ))
-                }
-            }
-        }
-    }
+//    fun listar(): List<Usuario> = AppDatabase(appContext).use { db ->
+//        db.readableDatabase.query(
+//            "usuarios", arrayOf("id", "nome", "telefone"),
+//            null, null, null, null, "nome COLLATE NOCASE, id"
+//        ).use { usuario ->
+//            buildList {
+//                while (usuario.moveToNext()) {
+//                    add(Usuario(
+//                        usuario.getLong(0),
+//                        usuario.getString(1),
+//                        usuario.getString(2)
+//                    ))
+//                }
+//            }
+//        }
+//    }
 
     fun alterarPorId(id: Long, nome: String, hash: ByteArray? = null, salt: ByteArray? = null) {
         AppDatabase(appContext).use { db ->

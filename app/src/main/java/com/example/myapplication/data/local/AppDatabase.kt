@@ -26,10 +26,39 @@ internal class AppDatabase(context: Context): SQLiteOpenHelper(
             CREATE TABLE contatos(
             id INTEGER PRIMARY KEY,
             usuario_id INTEGER NOT NULL,
-            contato_usuario_id INTEGER NOT NULL,
-            saved_name INTEGER NOT NULL,
+            usuario_contato_id INTEGER NOT NULL,
+            nome TEXT,
             FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-            FOREIGN KEY (contato_usuario_id) REFERENCES usuarios(id)
+            FOREIGN KEY (contato_usuario_id) REFERENCES usuarios(id),
+            
+            UNIQUE(usuario_id, contato_usuario_id)
+            )
+        """.trimIndent())
+
+        db.execSQL("""
+            CREATE TABLE conversas(
+            id INTEGER PRIMARY KEY,
+            usuario_1_id INTEGER NOT NULL,
+            usuario_2_id INTEGER NOT NULL,
+            ultima_atualizacao INTEGER NOT NULL,
+            FOREIGN KEY (usuario_1_id) REFERENCES usuarios(id),
+            FOREIGN KEY (usuario_2_id) REFERENCES usuarios(id),
+            
+            UNIQUE(usuario_1_id, usuario_2_id)
+            )
+        """.trimIndent())
+
+        db.execSQL("""
+            CREATE TABLE mensagens(
+            id INTEGER PRIMARY KEY,
+            conversa_id INTEGER NOT NULL,
+            remetente_id INTEGER NOT NULL,
+            conteudo TEXT NOT NULL,
+            data_envio INTEGER NOT NULL,          
+            status TEXT DEFAULT 'ENTREGUE',
+            
+            FOREIGN KEY (conversa_id) REFERENCES conversas(id) ,
+            FOREIGN KEY (remetente_id) REFERENCES usuarios(id) 
             )
         """.trimIndent())
     }
