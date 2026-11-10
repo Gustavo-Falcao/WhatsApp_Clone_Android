@@ -1,14 +1,18 @@
 package com.example.myapplication.ui.screens
 
+import androidx.collection.mutableFloatListOf
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -28,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
@@ -35,10 +40,16 @@ import com.example.myapplication.ui.theme.GrayBox
 import com.example.myapplication.ui.theme.GrayTextForeGround
 import com.example.myapplication.ui.theme.GreenBackGroundNavBar
 import com.example.myapplication.ui.theme.GreenPrimary
+import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.viewmodel.ContatoViewModel
 import java.nio.file.WatchEvent
 
 @Composable
-fun NovoChatScreen(irParaForm: () -> Unit, onDismiss: () -> Unit) {
+fun NovoChatScreen(
+    irParaForm: () -> Unit,
+    onDismiss: () -> Unit,
+//    contatoViewModel: ContatoViewModel
+) {
     var search by remember { mutableStateOf("") }
 
     Column(
@@ -54,6 +65,40 @@ fun NovoChatScreen(irParaForm: () -> Unit, onDismiss: () -> Unit) {
         )
 
         ColumnCreateActions(irParaForm = irParaForm)
+
+        Column() {
+            Text(
+                text = "Frequently contacted",
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.Black,
+                modifier = Modifier.padding(start = 14.dp)
+            )
+
+            LazyColumn(modifier = Modifier
+                .clip(RoundedCornerShape(14))
+                .background(color = GrayBox)
+                .padding(vertical = 14.dp, horizontal = 18.dp),
+                verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                items(5) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(14.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.baseline_person),
+                            contentDescription = "Person Icon",
+                            tint = GrayTextForeGround
+                        )
+
+                        Text(
+                            text = "Nome contato",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -201,5 +246,16 @@ fun ColumnCreateActions(irParaForm: () -> Unit) {
         }
 
 
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    MyApplicationTheme {
+        NovoChatScreen(
+            irParaForm = {},
+            onDismiss = {}
+        )
     }
 }

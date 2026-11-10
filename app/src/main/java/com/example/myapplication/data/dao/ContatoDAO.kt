@@ -2,6 +2,7 @@ package com.example.myapplication.data.dao
 
 import android.content.ContentValues
 import android.content.Context
+import com.example.myapplication.auth.SessaoUsuario
 import com.example.myapplication.data.Contato
 import com.example.myapplication.data.local.AppDatabase
 
@@ -24,26 +25,26 @@ internal class ContatoDAO(context: Context) {
     }
     //listagem de contatos será por id do usuário atual e ordenando por nome
     //colocar clausula para pegar os contatos que tem o usuarioId igual ao do usuário atual
-    fun listarPorUsuarioId(usuarioAtualId: Long): List<Contato> = AppDatabase(appContext).use { db ->
-        //funcao exigirUsuario do sessao usuario
-        //usar normalmente o usuarioId so sessao usuario apos
-        db.readableDatabase.query(
-            "contatos",
-            arrayOf("id", "usuario_id", "usuario_contato_id", "nome"),
-            "id = ?",
-            arrayOf(usuarioAtualId.toString()),
-            null,
-            null,
-            "nome COLLATE NOCASE, id"
-        ).use { cursor ->
-            buildList {
-                while (cursor.moveToNext()) {
-                    add(Contato(
-                        cursor.getLong(0),
-                        cursor.getLong(1),
-                        cursor.getLong(2),
-                        cursor.getString(3)
-                    ))
+    fun listarPorUsuarioId(usuarioAtualId: Long): List<Contato> {
+        return AppDatabase(appContext).use { db ->
+            db.readableDatabase.query(
+                "contatos",
+                arrayOf("id", "usuario_id", "usuario_contato_id", "nome"),
+                "id = ?",
+                arrayOf(usuarioAtualId.toString()),
+                null,
+                null,
+                "nome COLLATE NOCASE, id"
+            ).use { cursor ->
+                buildList {
+                    while (cursor.moveToNext()) {
+                        add(Contato(
+                            cursor.getLong(0),
+                            cursor.getLong(1),
+                            cursor.getLong(2),
+                            cursor.getString(3)
+                        ))
+                    }
                 }
             }
         }

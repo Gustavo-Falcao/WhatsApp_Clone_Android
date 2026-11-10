@@ -22,10 +22,14 @@ import com.example.myapplication.navigation.NovoChat
 import com.example.myapplication.ui.screens.FormNovoContatoScreen
 import com.example.myapplication.ui.screens.NovoChatScreen
 import com.example.myapplication.ui.theme.SheetBackGround
+import com.example.myapplication.ui.viewmodel.ContatoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeBottomSheet(onDismiss: () -> Unit) {
+fun HomeBottomSheet(
+    contatoViewModel: ContatoViewModel,
+    onDismiss: () -> Unit
+) {
     val sheetNavController = rememberNavController()
 
     val sheetState = rememberModalBottomSheetState(
@@ -54,7 +58,8 @@ fun HomeBottomSheet(onDismiss: () -> Unit) {
                 composable<NovoChat> {
                     NovoChatScreen(
                         irParaForm = { sheetNavController.navigate(FormNovoContato) },
-                        onDismiss = onDismiss
+                        onDismiss = onDismiss,
+                        //contatoViewModel = contatoViewModel
                     )
                 }
 

@@ -59,10 +59,17 @@ import com.example.myapplication.ui.theme.GreenSecondary
 import com.example.myapplication.ui.theme.GreenShadow
 import com.example.myapplication.ui.theme.MainBackGroundColor
 import com.example.myapplication.ui.theme.MyApplicationTheme
+import com.example.myapplication.ui.viewmodel.ContatoViewModel
+import com.example.myapplication.ui.viewmodel.ConversaViewModel
 import java.time.format.TextStyle
 
 @Composable
-fun ChatsScreen(irParaChat: () -> Unit, modifier: Modifier = Modifier) {
+fun ChatsScreen(
+    conversaViewModel: ConversaViewModel,
+    contatoViewModel: ContatoViewModel,
+    irParaChat: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     var showSheet by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -87,29 +94,12 @@ fun ChatsScreen(irParaChat: () -> Unit, modifier: Modifier = Modifier) {
                 val showSeparatorLine = index != 14
                 ContatoElement(isNotificationViewd, showSeparatorLine, irParaChat)
             }
-
-//            Box() {
-//                Icon(
-//                    painter = painterResource(id = R.drawable.chat_add),
-//                    contentDescription = "Chat icon",
-//                    tint = Color.Black,
-//                    modifier = Modifier
-//                        .align(Alignment.TopEnd)
-//                        .offset(
-//                            x = (-10).dp,
-//                            y = (-70).dp
-//                        )
-//                        .clip(RoundedCornerShape(20.dp))
-//                        .background(color = GreenPrimary)
-//                        .padding(18.dp)
-//                        .size(24.dp)
-//                )
-//            }
         }
     }
 
     if(showSheet) {
         HomeBottomSheet(
+            contatoViewModel = contatoViewModel,
             onDismiss = { showSheet = false }
         )
     }
@@ -309,10 +299,10 @@ fun ContatoElement(isNotificationViewd: Boolean, showSeparatorLine: Boolean, irP
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MyApplicationTheme {
-        ChatsScreen(irParaChat = {})
-    }
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    MyApplicationTheme {
+//        ChatsScreen(irParaChat = {})
+//    }
+//}

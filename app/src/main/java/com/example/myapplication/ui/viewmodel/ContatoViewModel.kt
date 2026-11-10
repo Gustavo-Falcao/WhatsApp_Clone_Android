@@ -8,6 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.auth.SessaoUsuario
+import com.example.myapplication.data.Contato
 import com.example.myapplication.data.dao.ContatoDAO
 import com.example.myapplication.data.dao.UsuarioDAO
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +19,8 @@ import kotlinx.coroutines.withContext
 class ContatoViewModel(application: Application): AndroidViewModel(application) {
     private val dao = ContatoDAO(application)
     private val usuarioDAO = UsuarioDAO(application)
+    var contatos by mutableStateOf<List<Contato>>(emptyList())
+    val usuarioAtualId: Long? get() = SessaoUsuario.usuarioId
     var carregando by mutableStateOf(false)
         private set
     var mensagem by mutableStateOf<String?>(null)
@@ -24,15 +28,15 @@ class ContatoViewModel(application: Application): AndroidViewModel(application) 
     var concluido by mutableStateOf(false)
         private set
 
-    private fun executar(op: suspend () -> Boolean) {
+    private fun executar(op: suspend () -> Unit) {
         if(carregando || concluido) return
         carregando = true
         mensagem = null
-
         viewModelScope.launch {
             try {
-                concluido = withContext(Dispatchers.IO){op()}
-                if(!concluido) mensagem = "Algo invalido"
+                SessaoUsuario.exigirUsuario()
+                op()
+
             } catch (e: SQLiteConstraintException) {
                 mensagem = "Não foi possivel cadastrar."
             } catch (e: IllegalStateException) {
@@ -43,6 +47,11 @@ class ContatoViewModel(application: Application): AndroidViewModel(application) 
                 carregando = false
             }
         }
+    }
+
+    fun listarPorUsuarioId() = executar {
+        val lista = withContext(Dispatchers.IO) { dao.listarPorUsuarioId(usuarioAtualId!!) }
+        contatos = lista
     }
 
 //    fun cadastrar(usuarioAtualId: Long, contatoUsuarioId: Long, savedName: String) = executar {
