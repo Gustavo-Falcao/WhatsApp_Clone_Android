@@ -29,9 +29,9 @@ internal class AppDatabase(context: Context): SQLiteOpenHelper(
             usuario_contato_id INTEGER NOT NULL,
             nome TEXT,
             FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-            FOREIGN KEY (contato_usuario_id) REFERENCES usuarios(id),
+            FOREIGN KEY (usuario_contato_id) REFERENCES usuarios(id),
             
-            UNIQUE(usuario_id, contato_usuario_id)
+            UNIQUE(usuario_id, usuario_contato_id)
             )
         """.trimIndent())
 

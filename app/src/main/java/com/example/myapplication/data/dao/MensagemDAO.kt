@@ -8,25 +8,39 @@ internal class MensagemDAO(context: Context) {
     private val appContext = context.applicationContext
     private val conversaDao = ConversaDAO(context)
 
-    fun cadastrar(conversaId: Long, remetenteId: Long, conteudo: String) {
+    fun cadastrar(usuarioAtualId: Long, destinatarioId: Long, conteudo: String) {
 
-        AppDatabase(appContext).use { db ->
-            val dbEscrita = db.writableDatabase
+        AppDatabase(appContext).use { helper ->
+            val db = helper.writableDatabase
 
-//            dbEscrita.inTransaction {
-//                var conversaId = conversaDao.buscarIdConversaExistente(dbEscrita, )
-//            }
-            val dados = ContentValues().apply {
-                put("conversa_id", conversaId)
-                put("remetente_id", remetenteId)
-                put("conteudo", conteudo)
-                put("data_envio", System.currentTimeMillis())
+            db.beginTransaction()
+
+            try {
+                val agora = System.currentTimeMillis()
+                val conversaId = conversaDao.buscarOuCriarConversa(
+                    db,
+                    usuarioAtualId,
+                    destinatarioId,
+                    agora
+                )
+                val dados = ContentValues().apply {
+                    put("conversa_id", conversaId)
+                    put("remetente_id", usuarioAtualId)
+                    put("conteudo", conteudo)
+                    put("data_envio", agora)
+                }
+                db.insertOrThrow(
+                    "mensagens",
+                    null,
+                    dados
+                )
+
+                conversaDao.alterarPorId(db, conversaId, agora)
+
+                db.setTransactionSuccessful()
+            } finally {
+                db.endTransaction()
             }
-            db.writableDatabase.insertOrThrow(
-                "mensagens",
-                null,
-                dados
-            )
         }
     }
 

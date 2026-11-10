@@ -10,21 +10,57 @@ import java.time.Instant
 internal class ConversaDAO(context: Context) {
     private val appContext = context.applicationContext
 
-    fun cadastrar(usuario1Id: Long, usuario2Id: Long): Long? {
-        var idConversa: Long? = null
-        AppDatabase(appContext).use { db ->
-            val dados = ContentValues().apply {
-                put("usuario_1_id", usuario1Id)
-                put("usuario_2_id", usuario2Id)
-                put("ultima_atualizacao", System.currentTimeMillis())
-            }
-            idConversa = db.writableDatabase.insertOrThrow(
-                "conversas",
-                null,
-                dados
-            )
+    fun buscarOuCriarConversa(db: SQLiteDatabase, usuarioAtualId: Long, destinatarioId: Long, agora: Long): Long {
+        var conversaId = buscarIdConversaExistente(db,usuarioAtualId, destinatarioId)
+
+        if(conversaId == null) {
+            conversaId = cadastrar(db, usuarioAtualId, destinatarioId, agora)
         }
+
+        return conversaId
+    }
+
+    fun buscarIdConversaExistente(db: SQLiteDatabase, user1Id: Long, user2Id: Long): Long? {
+        return db.query(
+            "conversas",
+            arrayOf("id"),
+            "(usuario_1_id = ? AND usuario_2_id = ?) OR (usuario_1_id = ? AND usuario_2_id = ?)",
+            arrayOf(user1Id.toString(), user2Id.toString(), user2Id.toString(), user1Id.toString()),
+            null, null, null
+        ).use { cursor ->
+            if(cursor.moveToFirst()) cursor.getLong(0) else null
+        }
+    }
+
+    fun cadastrar(db: SQLiteDatabase, usuario1Id: Long, usuario2Id: Long, agora: Long): Long {
+        var idConversa: Long
+
+        val dados = ContentValues().apply {
+            put("usuario_1_id", usuario1Id)
+            put("usuario_2_id", usuario2Id)
+            put("ultima_atualizacao", agora)
+        }
+        idConversa = db.insertOrThrow(
+            "conversas",
+            null,
+            dados
+        )
+
         return idConversa
+    }
+
+    fun alterarPorId(db: SQLiteDatabase, conversaId: Long, agora: Long) {
+        val dadosConversa = ContentValues().apply {
+            put("ultima_atualizacao", agora)
+        }
+        val linhasAlteradas = db.update(
+            "conversas",
+            dadosConversa,
+            "id = ?",
+            arrayOf(conversaId.toString())
+        )
+
+        require(linhasAlteradas == 1) { "Não foi possível atualizar conversa" }
     }
 
     fun listarConversasExistentesDoUsuarioAtual(usuarioAtualId: Long): List<Conversa> = AppDatabase(appContext).use { db ->
@@ -50,25 +86,5 @@ internal class ConversaDAO(context: Context) {
                 }
             }
         }
-    }
-
-    fun buscarIdConversaExistente(db: SQLiteDatabase, user1: Long, user2: Long): Long? {
-        var conversaIdEncontrada: Long? = null
-
-        db.query(
-            "conversas",
-            arrayOf("id"),
-            "(usuario_1_id = ? AND usuario_2_id = ?) OR (usuario_2_id = ? AND usuario_1_id = ?)",
-            arrayOf(user1.toString(), user2.toString(), user2.toString(), user1.toString()),
-            null,
-            null,
-            null
-        ).use { cursor ->
-            if(cursor.moveToFirst()) {
-                conversaIdEncontrada = cursor.getLong(0)
-            }
-        }
-
-        return conversaIdEncontrada
     }
 }
